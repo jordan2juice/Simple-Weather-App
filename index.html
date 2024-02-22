@@ -4,20 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather App</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <main>
-      <h1>Weather App</h1>
       <div>
         <form id="weather-form">
-          <label
+          <label class="label"
             >City
             <input type="text" name="city" id="city" />
           </label>
-          <button type="submit">Get Weather</button>
+          <button id="submit" type="submit">Get Weather</button>
         </form>
       </div>
+      <div id="card">
+        <h1 class="cityDisplay"></h1>
+        <p class="tempDisplay">90&#176;F</p>
+        <p class="humdidtyDisplay">Humidity: 90%</p>
+        <p class="descDisplay">Clear Skies</p>
+        <p class="errorDisplay">Please Enter City</p>
+      </div>
     </main>
+
     <script src="app.js"></script>
   </body>
 </html>

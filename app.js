@@ -1,39 +1,54 @@
 "use strict";
 
-const URL = "https://api.tomorrow.io/v4/weather/forecast";
-const API_KEY = "ZQng47zktSHEinGGm3GdqgBlZyJi3CLC";
-const city = "Memphis";
+const BASE_URL =
+  "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline";
+const API_KEY = "QHPYDX7CB3SRA9ME2AB7S5FHZ";
 
 class Weather {
   constructor(weatherData) {
-    this.temp = weatherData.values.temperatureAvg;
-    // this.humidity = weatherData.timelines.minutely.values.humidity;
-    // this.windSpeed = weatherData.timelines.minutely.values.windSpeed;
+    this.city = weatherData.city;
+    this.temp = weatherData.temp;
+    this.humidity = weatherData.humidity;
+    this.desc = weatherData.description;
+    this.icon = weatherData.icon;
   }
 }
 
 async function getWeatherData() {
+  const weatherData = document.getElementById("city");
+  const city = weatherData.value;
+  if (!city) return alert("Please enter a valid City!");
   try {
-    const response = await fetch(
-      `${URL}?apikey=${API_KEY}&location=${city}`
-    );
+    const response = await fetch(`${BASE_URL}/${city}/?key=${API_KEY}`);
     const weatherData = await response.json();
     console.log(weatherData);
-    const weatherDays = weatherData.timelines.daily.map ((day) => {
+    const weatherDays = weatherData.days.map((day) => {
       return new Weather(day);
-        
     });
     // loop over weatherDays array call the display weather function
-    weatherDays.forEach(displayWeather);
+    // for each day
+    weatherDays.forEach((day) => {
+      displayWeather(day, weatherData.address);
+    });
     // console.log(weatherDays);
   } catch (error) {
     console.log(error);
   }
 }
 
-function displayWeather(day) {
-// display each day as HTML
+function displayWeather(weather, city) {
+  document.querySelector(".cityDisplay").textContent = city;
+  document.querySelector(".tempDisplay").textContent = weather.temp + "°F";
+  document.querySelector(".humdidtyDisplay").textContent =
+    weather.humidity + "%";
+  document.querySelector(".descDisplay").textContent = weather.desc;
 }
 
 getWeatherData();
 
+// Event Listener to add a city when user submits form
+document.querySelector("form").addEventListener("submit", function (event) {
+  event.preventDefault();
+  const city = document.querySelector("#city").value;
+  getWeatherData(city);
+});
